@@ -1,0 +1,130 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+/* CSS Properties */
+:root {
+  --clr-black: #212121;
+  --clr-dark-gray: #2a2a2a;
+  --clr-gray: #909a8f;
+  --clr-light-gray: #e9e9e9;
+  --clr-red: #ff2626;
+  --clr-yellow: #ffc200;
+  --clr-blue: #1e7ed4;
+  --clr-white: #fff;
+
+  --fs-medium: 500;
+  --fs-semi-bold: 600;
+  --fs-bold: 700;
+  --fs-extra-bold: 800;
+}
+
+/* General */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #e9e9e9;
+  height: 100dvh;
+  color: var(--clr-black);
+  overflow: hidden;
+}
+
+#root {
+  height: 100dvh;
+}
+
+button:not(:disabled),
+*[role="button"] {
+  cursor: pointer;
+}
+
+.relative {
+  position: relative;
+}
+
+.reset-button {
+  background-color: transparent;
+  border: none;
+}
+
+.text-gray-small {
+  color: var(--clr-gray);
+  font-size: 0.875rem;
+}
+
+.text-red,
+.text-red a {
+  color: var(--clr-red);
+}
+
+.no-shrink {
+  flex-shrink: 0;
+}
+
+
+body.prevent-scroll #main {
+  overflow: hidden;
+}
+
+.flow {
+  margin-block-start: 5rem;
+}
+
+.flow-sm {
+  margin-block-start: 2.5rem;
+}
+
+.flow-xs {
+  margin-block-start: 1.25rem;
+}
+
+.flow-xxs {
+  margin-block-start: 1rem;
+}
+
+.flow-xxxs {
+  margin-block-start: 0.5rem;
+}
+
+.flow-end {
+  margin-block-end: 5rem;
+
+}
+
+.flow-end-sm {
+  margin-block-end: 2.5rem;
+}
+
+.center-self {
+  place-self: center;
+}
+
+.flex-1 {
+  flex: 1
+}
+
+.clip-text {
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+}
