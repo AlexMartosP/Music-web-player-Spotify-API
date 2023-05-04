@@ -79,7 +79,7 @@ function Login() {
               {typeof error === "object" ? (
                 <>
                   {error?.status === 96
-                    ? "This user not registered in the Developer Dashboard, please contact me at: alex.martos@hotmail.se"
+                    ? (error as any)?.message
                     : error.error_description}
                 </>
               ) : (
