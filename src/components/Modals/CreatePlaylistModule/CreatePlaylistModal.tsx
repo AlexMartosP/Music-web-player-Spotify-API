@@ -18,6 +18,7 @@ function CreatePlaylistModal({ handleClose }: CreatePlaylistModalProps) {
       name,
       description,
     }).then((data) => {
+      handleClose();
       navigate(`/playlist/${data.id}`);
     });
   }

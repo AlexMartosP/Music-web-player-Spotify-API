@@ -43,7 +43,6 @@ function SelectPlaylistModal({ uri, handleClose }: SelectPlaylistModal) {
 
   function handleSelect(playlistId: string) {
     addToPlaylist(playlistId, uri);
-
     handleClose();
   }
 
