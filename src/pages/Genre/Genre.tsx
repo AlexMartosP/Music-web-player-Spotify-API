@@ -18,6 +18,7 @@ import { useAppSelector } from "../../store/hooks";
 import { GenreInfo, GenrePlaylists } from "../../types/genre";
 import { PlaylistListType } from "../../types/playlist";
 import { Grid, InfoWrapper } from "./Genre.styles";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function getKey(id: string | undefined, market: string) {
   if (!id) {
@@ -103,6 +104,9 @@ function Genre() {
                     })}
                   </Grid>
                   <LoadMore ref={ref} />
+                  <MetaTitle
+                    title={infoData ? `Genre - ${infoData.name}` : "Genre"}
+                  />
                 </>
               ) : (
                 <Heading2 className="flow-sm">

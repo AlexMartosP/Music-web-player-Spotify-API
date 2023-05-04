@@ -29,6 +29,7 @@ import {
 } from "./BrowseRooms.styles";
 // Types
 import { RoomType } from "../../types/remote";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function BrowseRooms() {
   const [rooms, setRooms] = useState<RoomType[]>([]);
@@ -180,6 +181,7 @@ function BrowseRooms() {
       ) : (
         <Navigate to={`/in-room/${remote.roomInfo.id}`} replace />
       )}
+      <MetaTitle title="Browse rooms" />
     </>
   );
 }

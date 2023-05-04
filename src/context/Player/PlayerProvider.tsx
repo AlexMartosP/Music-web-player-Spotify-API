@@ -9,13 +9,19 @@ import {
   useState,
 } from "react";
 // Redux
-import { selectIsActive, selectPlaybar } from "../../slices/playbar";
+import {
+  selectCurrentTrack,
+  selectIsActive,
+  selectPlaybar,
+} from "../../slices/playbar";
 import { useAppSelector } from "../../store/hooks";
 // Hooks
 import usePlayerActions from "./hooks/usePlayerActions";
 import usePlayerConnection from "./hooks/usePlayerConnection";
 // Helpers
 import isInputField from "../../helpers/isInputField";
+import { Helmet } from "react-helmet-async";
+import { current } from "@reduxjs/toolkit";
 
 export interface PlayerContextType {
   isInitLoading: boolean;
@@ -27,6 +33,7 @@ const PlayerContext = createContext<PlayerContextType | null>(null);
 function PlayerProvider({ children }: PropsWithChildren) {
   const playerRef = useRef<Spotify.Player | null>(null);
   const isActive = useAppSelector(selectIsActive);
+  const currentTrack = useAppSelector(selectCurrentTrack);
   const playerActions = usePlayerActions(playerRef);
   const isInitLoading = usePlayerConnection(playerRef);
 
@@ -49,6 +56,8 @@ function PlayerProvider({ children }: PropsWithChildren) {
     };
   }, [isActive]);
 
+  console.log("re-render");
+
   const value = useMemo(() => {
     return {
       isInitLoading,
@@ -57,7 +66,12 @@ function PlayerProvider({ children }: PropsWithChildren) {
   }, [isInitLoading]);
 
   return (
-    <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>
+    <PlayerContext.Provider value={value}>
+      <Helmet>
+        <title>{currentTrack.name}</title>
+      </Helmet>
+      {children}
+    </PlayerContext.Provider>
   );
 }
 

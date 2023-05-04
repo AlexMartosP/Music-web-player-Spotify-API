@@ -21,6 +21,7 @@ import formatDate from "../../helpers/formatDate";
 // Types
 import { NextSingleAlbumPageType, SingleAlbum } from "../../types/album";
 import { SingleTrackType } from "../../types/track";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function Album() {
   const { id } = useParams();
@@ -82,6 +83,7 @@ function Album() {
                   </>
                 )}
               </div>
+              <MetaTitle title={data ? `Album - ${data[0].name}` : "Album"} />
             </>
           )}
         </>

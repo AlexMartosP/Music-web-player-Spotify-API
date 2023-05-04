@@ -16,6 +16,7 @@ import Container from "./pages/Container";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Protected from "./pages/Protected";
+import { HelmetProvider } from "react-helmet-async";
 // Lazy pages
 const Album = lazy(() => import("./pages/Album"));
 const Artist = lazy(() => import("./pages/Artist"));
@@ -107,17 +108,19 @@ function AppRoutes() {
 function App() {
   return (
     <Router>
-      <Provider store={store}>
-        <SWRConfig
-          value={{
-            fetcher: fetcher,
-            onErrorRetry: onErrorRetry,
-            revalidateOnFocus: false,
-          }}
-        >
-          <AppRoutes />
-        </SWRConfig>
-      </Provider>
+      <HelmetProvider>
+        <Provider store={store}>
+          <SWRConfig
+            value={{
+              fetcher: fetcher,
+              onErrorRetry: onErrorRetry,
+              revalidateOnFocus: false,
+            }}
+          >
+            <AppRoutes />
+          </SWRConfig>
+        </Provider>
+      </HelmetProvider>
     </Router>
   );
 }

@@ -1,16 +1,11 @@
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-// SWR
-import useSWRImmutable from "swr/immutable";
 // Redux
 import { checkSavedTracks } from "../../../services/URLCreators";
 import { leaveRoom, updateRemoteTrack } from "../../../slices/remote";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useAppDispatch } from "../../../store/hooks";
 import {
   deactivate,
   load,
-  selectCurrentTrack,
-  selectPlaybar,
-  selectVolume,
   update_current_track,
   update_next_tracks,
   update_playstate,
@@ -20,40 +15,44 @@ import {
 // Hooks
 import useAuth from "../../../hooks/useAuth";
 // Services
-import { flatFetcher } from "../../../services/fetcher";
 import { refreshToken } from "../../../services/auth";
 // Utils
 import Timer from "../../../utils/timer";
 // Types
 import { AccesTokenStorage } from "../../../types/auth";
+import { useSWRConfig } from "swr";
 
 function usePlayerConnection(
   playerRef: MutableRefObject<Spotify.Player | null>
 ) {
   const [isInitLoading, setIsInitLoading] = useState(true);
-  const currentTrack = useAppSelector(selectCurrentTrack);
   const dispatch = useAppDispatch();
   const { logout } = useAuth();
-  const { mutate: savedMutate } = useSWRImmutable(
-    currentTrack?.id && {
-      type: "savings",
-      key: currentTrack.id,
-      urls: checkSavedTracks([currentTrack.id]),
-    },
-    flatFetcher,
-    { revalidateIfStale: false, revalidateOnMount: false }
-  );
+  const { mutate } = useSWRConfig();
   const currentTrackId = useRef<string | null>(null);
+  const initilized = useRef<boolean>(false);
 
   function tryMutate(newID: string) {
     if (currentTrackId.current !== newID) {
-      savedMutate();
+      mutate({
+        type: "savings",
+        key: newID,
+        urls: checkSavedTracks([newID]),
+      });
     }
   }
 
   function tryUpdateRoom(currentTrack: Spotify.Track) {
     if (currentTrackId.current !== currentTrack.id) {
       dispatch(updateRemoteTrack(currentTrack.uri, 0));
+    }
+  }
+
+  function trysetIsInitLoading() {
+    if (!initilized.current) {
+      dispatch(update_status(true));
+      setIsInitLoading(false);
+      initilized.current = true;
     }
   }
 
@@ -141,10 +140,7 @@ function usePlayerConnection(
             }
             currentTrackId.current = args.track_window.current_track.id;
 
-            if (isInitLoading) {
-              dispatch(update_status(true));
-              setIsInitLoading(false);
-            }
+            trysetIsInitLoading();
           } else {
             dispatch(deactivate());
             dispatch(leaveRoom());

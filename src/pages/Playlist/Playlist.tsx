@@ -19,6 +19,7 @@ import {
   SinglePlaylistType,
 } from "../../types/playlist";
 import NotFound from "../NotFound";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function Playlist() {
   const { id } = useParams();
@@ -92,6 +93,7 @@ function Playlist() {
               </div>
             </>
           )}
+          <MetaTitle title={data ? `Playlist - ${data[0].name}` : "Playlist"} />
         </>
       ) : (
         <>

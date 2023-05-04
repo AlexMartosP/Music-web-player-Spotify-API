@@ -16,6 +16,7 @@ import getSavedTracksKey from "../../services/keyGetters/getSavedTrackesKey";
 import { selectCurrentUser } from "../../slices/auth";
 import { SinglePlaylistTrack } from "../../types/playlist";
 import { SavedTracksType } from "../../types/user";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function SavedTracks() {
   const user = useSelector(selectCurrentUser);
@@ -91,6 +92,7 @@ function SavedTracks() {
           </div>
         </>
       )}
+      <MetaTitle title="Saved tracks" />
     </>
   );
 }

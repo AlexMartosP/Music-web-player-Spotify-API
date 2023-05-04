@@ -39,6 +39,7 @@ import {
   RelatedArtists,
   SingleArtistType,
 } from "../../types/artist";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function Artist() {
   const { id } = useParams();
@@ -170,6 +171,9 @@ function Artist() {
                       </Slider>
                     </Section>
                   )}
+                  <MetaTitle
+                    title={info ? `Artist - ${info.name}` : "Artist"}
+                  />
                 </>
               ) : (
                 <div className="flow">

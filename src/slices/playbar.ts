@@ -40,7 +40,7 @@ const initialState: InitialStateType = {
     nextTrack: [],
     previousTrack: [],
     playState: {
-      isPaused: false,
+      isPaused: true,
       isShuffle: false,
       repeatMode: 0,
       position: 0,
@@ -57,6 +57,8 @@ export const selectIsActive = (state: RootState) =>
 export const selectCurrentTrack = (state: RootState) =>
   state.playbar.player.currentTrack;
 export const selectVolume = (state: RootState) => state.playbar.volume;
+export const selectIsPaused = (state: RootState) =>
+  state.playbar.player.playState.isPaused;
 
 const playbarSlice = createSlice({
   name: "playbar",

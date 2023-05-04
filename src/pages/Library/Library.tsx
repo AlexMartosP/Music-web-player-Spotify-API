@@ -21,6 +21,8 @@ import defaultImage from "../../assets/default_playlist.jpg";
 import { Grid } from "../Genre/Genre.styles";
 // Types
 import { MultiplePlaylists, SinglePlaylistType } from "../../types/playlist";
+import { Helmet } from "react-helmet-async";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function Library() {
   const { data, isLoading, error, setSize } = useSWRInfinite<MultiplePlaylists>(
@@ -97,6 +99,7 @@ function Library() {
           ))}
         </Grid>
       )}
+      <MetaTitle title="Library" />
     </>
   );
 }

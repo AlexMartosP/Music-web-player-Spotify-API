@@ -6,6 +6,7 @@ import { SearchWrapper } from "./Search.styles";
 import NoSearch from "./components/NoSearch";
 import SearchResult from "./components/SearchResults/SearchResults";
 import withNetwork from "../../HOC/withNetwork";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function Search() {
   const [query, setQuery] = useSearchParams("");
@@ -45,6 +46,7 @@ function Search() {
         </SearchWrapper>
       </div>
       {defferedQuery ? <SearchResult query={defferedQuery} /> : <NoSearch />}
+      <MetaTitle title="Search" />
     </>
   );
 }

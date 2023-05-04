@@ -130,55 +130,55 @@ export const subscribeToRoom =
         (Date.now() - documentData.currentTrack.timestamp);
       dispatch(playSeekTrack(position, documentData.currentTrack.uri));
     } else {
-      if (!playbar.playState.isPaused) {
+      if (!playbar.player.playState.isPaused) {
         dispatch(togglePlay(true));
       }
     }
 
     // Listen to changes
-    const unsubscribe = onSnapshot(document, (roomSnapshot) => {
-      const roomData = roomSnapshot.data() as RoomType | undefined;
+    const unsubscribe = onSnapshot(
+      document,
+      (roomSnapshot) => {
+        const roomData = roomSnapshot.data() as RoomType | undefined;
 
-      switch (roomData?.actionType) {
-        case REMOTEACTIONS.play_track:
-          const { uri } = roomData.currentTrack;
-          dispatch(playTrack(undefined, uri));
-          break;
-        case REMOTEACTIONS.play:
-          dispatch(
-            playSeekTrack(
-              roomData.currentTrack.position,
-              roomData.currentTrack.uri
-            )
-          );
-          dispatch(set_isPaused(false));
-          break;
-        case REMOTEACTIONS.pause:
-          dispatch(togglePlay(roomData.currentTrack.isPaused));
-          dispatch(set_isPaused(true));
-          break;
-        case REMOTEACTIONS.seek:
-          const { position } = roomData.currentTrack;
-          dispatch(seek(position));
-          break;
-        case REMOTEACTIONS.new_comment:
-          dispatch(update_comment(roomData.messages));
-          break;
-        case REMOTEACTIONS.live_ended:
-          handleEnd();
-          break;
-        default:
-          break;
-      }
+        switch (roomData?.actionType) {
+          case REMOTEACTIONS.play_track:
+            const { uri } = roomData.currentTrack;
+            dispatch(playTrack(undefined, uri));
+            break;
+          case REMOTEACTIONS.play:
+            dispatch(
+              playSeekTrack(
+                roomData.currentTrack.position,
+                roomData.currentTrack.uri
+              )
+            );
+            dispatch(set_isPaused(false));
+            break;
+          case REMOTEACTIONS.pause:
+            dispatch(togglePlay(roomData.currentTrack.isPaused));
+            dispatch(set_isPaused(true));
+            break;
+          case REMOTEACTIONS.seek:
+            const { position } = roomData.currentTrack;
+            dispatch(seek(position));
+            break;
+          case REMOTEACTIONS.new_comment:
+            dispatch(update_comment(roomData.messages));
+            break;
+          case REMOTEACTIONS.live_ended:
+            handleEnd();
+            break;
+          default:
+            break;
+        }
 
-      // if (roomData?.messages) {
-      //   dispatch(update_comment(roomData.messages));
-      // }
-
-      if (roomData?.listeners) {
-        dispatch(update_listeners(roomData.listeners));
-      }
-    });
+        if (roomData?.listeners) {
+          dispatch(update_listeners(roomData.listeners));
+        }
+      },
+      () => handleEnd()
+    );
 
     return unsubscribe;
   };
@@ -303,10 +303,10 @@ export const toggleRemotePlay = (): AppThunk => async (dispatch, getState) => {
   const { playbar, remote } = getState();
   if (remote.isModerator) {
     await updateDoc(doc(db, "rooms", remote.roomInfo.id), {
-      "currentTrack.isPaused": !playbar.playState.isPaused,
+      "currentTrack.isPaused": !playbar.player.playState.isPaused,
       "currentTrack.position": Timer.time,
       "currentTrack.timestamp": Date.now(),
-      actionType: playbar.playState.isPaused
+      actionType: playbar.player.playState.isPaused
         ? REMOTEACTIONS.play
         : REMOTEACTIONS.pause,
     });

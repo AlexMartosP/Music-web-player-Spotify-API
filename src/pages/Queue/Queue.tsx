@@ -18,6 +18,7 @@ import {
   NotActiveWrapper,
   ValidatingSpinner,
 } from "./Queue.styles";
+import MetaTitle from "../MetaTitle/MetaTitle";
 
 function Queue() {
   const [isValidating, setIsValidating] = useState(false);
@@ -113,6 +114,7 @@ function Queue() {
           <span>This will transfer your play state to this player</span>
         </NotActiveWrapper>
       )}
+      <MetaTitle title="Queue" />
     </>
   );
 }
