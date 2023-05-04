@@ -115,6 +115,11 @@ function ExtendedPlaybar({
     if (nextRef.current) {
       nextObserver.observe(nextRef.current);
     }
+
+    return () => {
+      previousObserver.disconnect();
+      nextObserver.disconnect();
+    };
   }, [currentTrack.id]);
 
   return createPortal(
