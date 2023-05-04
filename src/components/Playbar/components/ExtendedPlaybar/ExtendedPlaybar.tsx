@@ -250,68 +250,70 @@ function ExtendedPlaybar({
           />
         )}
       </AnimatePresence>
-      <PopperMenu
-        isOpen={isMoreMenuOpen}
-        title={currentTrack.name}
-        image={currentTrack.album.images[0].url}
-        handleClose={closeMoreMenu}
-        ref={moreMenuBtnRef}
-        mobileOnly
-      >
-        <MoreMenuButton className="reset-button" onClick={openPlaylistModal}>
-          <PlusCircle />
-          <span>Add to playlist</span>
-        </MoreMenuButton>
-        <MoreMenuButton className="reset-button">
-          <Layers />
-          <span>Add to queue</span>
-        </MoreMenuButton>
-        <MoreMenuButton
-          as={Link}
-          to={`/album/${currentTrack.album.uri.split(":")[2]}`}
-          onClick={closeExpanded}
-          className="reset-button"
+      {currentTrack.id && (
+        <PopperMenu
+          isOpen={isMoreMenuOpen}
+          title={currentTrack.name}
+          image={currentTrack.album.images[0].url}
+          handleClose={closeMoreMenu}
+          ref={moreMenuBtnRef}
+          mobileOnly
         >
-          <Disc />
-          <span>Go to album</span>
-        </MoreMenuButton>
-        {currentTrack.artists.length > 1 ? (
-          <PopperMenu.Expandable
-            label={
-              <MoreMenuButton className="reset-button">
-                <User />
-                <span>Go to artist</span>
-              </MoreMenuButton>
-            }
-            mobileHeading="Artists"
-          >
-            {currentTrack.artists.map((artist) => (
-              <Link
-                key={artist.uri}
-                to={`/artist/${artist.uri.split(":")[2]}`}
-                onClick={closeExpanded}
-              >
-                <span>{artist.name}</span>
-              </Link>
-            ))}
-          </PopperMenu.Expandable>
-        ) : (
-          <MoreMenuButton
-            className="reset-button"
-            as={Link}
-            to={`/artist/${currentTrack.artists[0].uri.split(":")[2]}`}
-            onClick={closeExpanded}
-          >
-            <User />
-            <span>Go to artist</span>
+          <MoreMenuButton className="reset-button" onClick={openPlaylistModal}>
+            <PlusCircle />
+            <span>Add to playlist</span>
           </MoreMenuButton>
-        )}
+          <MoreMenuButton className="reset-button">
+            <Layers />
+            <span>Add to queue</span>
+          </MoreMenuButton>
+          <MoreMenuButton
+            as={Link}
+            to={`/album/${currentTrack.album.uri.split(":")[2]}`}
+            onClick={closeExpanded}
+            className="reset-button"
+          >
+            <Disc />
+            <span>Go to album</span>
+          </MoreMenuButton>
+          {currentTrack.artists.length > 1 ? (
+            <PopperMenu.Expandable
+              label={
+                <MoreMenuButton className="reset-button">
+                  <User />
+                  <span>Go to artist</span>
+                </MoreMenuButton>
+              }
+              mobileHeading="Artists"
+            >
+              {currentTrack.artists.map((artist) => (
+                <Link
+                  key={artist.uri}
+                  to={`/artist/${artist.uri.split(":")[2]}`}
+                  onClick={closeExpanded}
+                >
+                  <span>{artist.name}</span>
+                </Link>
+              ))}
+            </PopperMenu.Expandable>
+          ) : (
+            <MoreMenuButton
+              className="reset-button"
+              as={Link}
+              to={`/artist/${currentTrack.artists[0].uri.split(":")[2]}`}
+              onClick={closeExpanded}
+            >
+              <User />
+              <span>Go to artist</span>
+            </MoreMenuButton>
+          )}
 
-        <MoreMenuButton className="reset-button">
-          <Share />
-          <span>Share</span>
-        </MoreMenuButton>
-      </PopperMenu>
+          <MoreMenuButton className="reset-button">
+            <Share />
+            <span>Share</span>
+          </MoreMenuButton>
+        </PopperMenu>
+      )}
     </>,
     document.getElementById("portal")!
   );

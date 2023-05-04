@@ -17,7 +17,7 @@ interface MobileProps {
 
 function Mobile({ openPlaylistModal }: MobileProps) {
   const [isExtended, setIsExtended] = useState(false);
-  const { playState, currentTrack } = useAppSelector(selectPlaybar);
+  const { playState, currentTrack, isActive } = useAppSelector(selectPlaybar);
   const remote = useAppSelector(selectRemote);
   const { isInitLoading, playerActions } = usePlayer();
 
@@ -71,7 +71,7 @@ function Mobile({ openPlaylistModal }: MobileProps) {
         )}
       </div>
       <AnimatePresence>
-        {isExtended && (
+        {isExtended && isActive && (
           <ExtendedPlaybar
             openPlaylistModal={openPlaylistModal}
             closeExpanded={closeExpanded}
