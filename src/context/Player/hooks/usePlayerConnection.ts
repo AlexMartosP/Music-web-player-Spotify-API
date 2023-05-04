@@ -96,6 +96,7 @@ function usePlayerConnection(
         });
 
         player.addListener("ready", async ({ device_id }) => {
+          console.log("in ready");
           dispatch(load(device_id));
         });
 
@@ -160,10 +161,6 @@ function usePlayerConnection(
         playerRef.current = player;
         player.connect();
       };
-
-      window.addEventListener("focus", () => {
-        playerRef.current?.connect().then(() => console.log("reconected"));
-      });
 
       return () => {
         player?.disconnect();
