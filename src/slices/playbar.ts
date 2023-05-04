@@ -117,13 +117,11 @@ export const transfer =
 
     return mutateFetcher(base_api_url + `/me/player`, "PUT", {
       device_ids: [deviceId],
-    })
-      .then(() => {
-        if (deviceId === playbar.player.deviceId) {
-          dispatch(update_status(true));
-        }
-      })
-      .catch(() => location.reload());
+    }).then(() => {
+      if (deviceId === playbar.player.deviceId) {
+        dispatch(update_status(true));
+      }
+    });
   };
 
 export const playTrack =
