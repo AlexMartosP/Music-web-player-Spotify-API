@@ -10,6 +10,7 @@ import { selectCurrentUser } from "../../../slices/auth";
 import { selectPlaybar } from "../../../slices/playbar";
 import { useAppSelector } from "../../../store/hooks";
 import InputModal from "../InputModal";
+import Timer from "../../../utils/timer";
 
 interface CreateRoomModalProps {
   handleClose: () => void;
@@ -34,7 +35,7 @@ function CreateRoomModal({ handleClose }: CreateRoomModalProps) {
       currentTrack: {
         uri: playbar.currentTrack!.uri,
         isPaused: playbar.playState.isPaused,
-        position: playbar.playState.position,
+        position: Timer.time,
         timestamp: Date.now(),
       },
     });

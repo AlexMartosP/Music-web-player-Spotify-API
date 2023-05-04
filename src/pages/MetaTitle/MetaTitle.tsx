@@ -9,7 +9,6 @@ interface MetaTitleProps {
 function MetaTitle({ title }: MetaTitleProps) {
   const isPaused = useAppSelector(selectIsPaused);
 
-  console.log(isPaused);
   if (isPaused) {
     return (
       <Helmet>

@@ -149,7 +149,7 @@ export const playSeekTrack =
   async (dispatch) => {
     // Only if moderator
     if (uri) {
-      dispatch(updateRemoteTrack(uri));
+      dispatch(updateRemoteTrack(uri, position));
     }
 
     await mutateFetcher(base_api_url + `/me/player/play`, "PUT", {

@@ -135,47 +135,53 @@ export const subscribeToRoom =
       }
     }
 
+    let initilized = false;
+
     // Listen to changes
     const unsubscribe = onSnapshot(
       document,
       (roomSnapshot) => {
-        const roomData = roomSnapshot.data() as RoomType | undefined;
+        if (initilized) {
+          const roomData = roomSnapshot.data() as RoomType | undefined;
 
-        switch (roomData?.actionType) {
-          case REMOTEACTIONS.play_track:
-            const { uri } = roomData.currentTrack;
-            dispatch(playTrack(undefined, uri));
-            break;
-          case REMOTEACTIONS.play:
-            dispatch(
-              playSeekTrack(
-                roomData.currentTrack.position,
-                roomData.currentTrack.uri
-              )
-            );
-            dispatch(set_isPaused(false));
-            break;
-          case REMOTEACTIONS.pause:
-            dispatch(togglePlay(roomData.currentTrack.isPaused));
-            dispatch(set_isPaused(true));
-            break;
-          case REMOTEACTIONS.seek:
-            const { position } = roomData.currentTrack;
-            dispatch(seek(position));
-            break;
-          case REMOTEACTIONS.new_comment:
-            dispatch(update_comment(roomData.messages));
-            break;
-          case REMOTEACTIONS.live_ended:
-            handleEnd();
-            break;
-          default:
-            break;
-        }
+          switch (roomData?.actionType) {
+            case REMOTEACTIONS.play_track:
+              const { uri } = roomData.currentTrack;
+              dispatch(playTrack(undefined, uri));
+              dispatch(set_isPaused(false));
+              break;
+            case REMOTEACTIONS.play:
+              dispatch(
+                playSeekTrack(
+                  roomData.currentTrack.position,
+                  roomData.currentTrack.uri
+                )
+              );
+              dispatch(set_isPaused(false));
+              break;
+            case REMOTEACTIONS.pause:
+              dispatch(togglePlay(roomData.currentTrack.isPaused));
+              dispatch(set_isPaused(true));
+              break;
+            case REMOTEACTIONS.seek:
+              const { position } = roomData.currentTrack;
+              dispatch(seek(position));
+              break;
+            case REMOTEACTIONS.new_comment:
+              dispatch(update_comment(roomData.messages));
+              break;
+            case REMOTEACTIONS.live_ended:
+              handleEnd();
+              break;
+            default:
+              break;
+          }
 
-        if (roomData?.listeners) {
-          dispatch(update_listeners(roomData.listeners));
+          if (roomData?.listeners) {
+            dispatch(update_listeners(roomData.listeners));
+          }
         }
+        initilized = true;
       },
       () => handleEnd()
     );
@@ -293,6 +299,7 @@ export const updateRemoteTrack =
         ...((position || position === 0) && {
           "currentTrack.position": position,
           "currentTrack.timestamp": Date.now(),
+          "currentTrack.isPaused": false,
         }),
         actionType: REMOTEACTIONS.play_track,
       });
