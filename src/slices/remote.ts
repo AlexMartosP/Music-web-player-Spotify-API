@@ -255,6 +255,9 @@ export const leaveRoom =
         });
       }
     }
+    if (remote.isModerator) {
+      dispatch(leaveRoomAsModerator());
+    }
   };
 
 export const sendCommentToRoom =
