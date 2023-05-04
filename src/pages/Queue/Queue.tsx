@@ -33,7 +33,6 @@ function Queue() {
     {
       keepPreviousData: true,
       revalidateOnFocus: true,
-      revalidateOnMount: false,
     }
   );
 
@@ -67,7 +66,7 @@ function Queue() {
             <Heading>Queue</Heading>
             {isValidating && <ValidatingSpinner />}
           </HeadingWrapper>
-          {!isLoading && data && data.currently_playing ? (
+          {!isLoading && data ? (
             <div>
               <div className="flow-sm">Current track</div>
               <IncludeSaving ids={[data.currently_playing.id]}>
