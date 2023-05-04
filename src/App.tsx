@@ -1,36 +1,41 @@
+import { lazy, useEffect } from "react";
 import { Route, Routes } from "react-router";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
-import Container from "./pages/Container";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import { Provider } from "react-redux";
-import store from "./store";
-import Protected from "./pages/Protected";
-import { SWRConfig } from "swr";
-import { fetcher, onErrorRetry } from "./services/fetcher";
+// Redux
+import { Provider, useSelector } from "react-redux";
+import store from "./store/store";
 import { selectLoading } from "./slices/auth";
-import { useEffect } from "react";
+// SWR
+import { SWRConfig } from "swr";
+// Hooks
 import useAuth from "./hooks/useAuth";
-import { useSelector } from "react-redux";
-import Playlist from "./pages/Playlist";
-import Genre from "./pages/Genre/Genre";
-import Artist from "./pages/Artist";
-import Albums from "./pages/Artist/pages/Albums";
-import RelatedArtists from "./pages/Artist/pages/RelatedArtists/RelatedArtists";
-import Album from "./pages/Album";
-import Library from "./pages/Library";
-import SavedTracks from "./pages/SavedTracks";
-import Search from "./pages/Search";
-import Tracks from "./pages/Search/subpages/Tracks";
-import Playlists from "./pages/Search/subpages/Playlists";
-import SearchAlbums from "./pages/Search/subpages/Albums";
-import Artists from "./pages/Search/subpages/Artists";
-import Queue from "./pages/Queue";
-import BrowseRooms from "./pages/BrowseRooms";
-import InRoom from "./pages/InRoom";
-import RemoteHandlersProvider from "./context/RemoteHandlers";
-import PlayerProvider from "./context/Player/PlayerProvider";
+// Services
+import { fetcher, onErrorRetry } from "./services/fetcher";
+// Pages
+import Container from "./pages/Container";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import Protected from "./pages/Protected";
+// Lazy pages
+const Album = lazy(() => import("./pages/Album"));
+const Artist = lazy(() => import("./pages/Artist"));
+const Albums = lazy(() => import("./pages/Artist/pages/Albums"));
+const RelatedArtists = lazy(
+  () => import("./pages/Artist/pages/RelatedArtists")
+);
+const BrowseRooms = lazy(() => import("./pages/BrowseRooms"));
+const Genre = lazy(() => import("./pages/Genre/Genre"));
+const Home = lazy(() => import("./pages/Home"));
+const InRoom = lazy(() => import("./pages/InRoom"));
+const Library = lazy(() => import("./pages/Library"));
+const Playlist = lazy(() => import("./pages/Playlist"));
+const Queue = lazy(() => import("./pages/Queue"));
+const SavedTracks = lazy(() => import("./pages/SavedTracks"));
+const Search = lazy(() => import("./pages/Search"));
+const SearchAlbums = lazy(() => import("./pages/Search/subpages/Albums"));
+const Artists = lazy(() => import("./pages/Search/subpages/Artists"));
+const Playlists = lazy(() => import("./pages/Search/subpages/Playlists"));
+const Tracks = lazy(() => import("./pages/Search/subpages/Tracks"));
 
 function AppRoutes() {
   const { load } = useAuth();
