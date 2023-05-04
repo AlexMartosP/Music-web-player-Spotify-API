@@ -81,7 +81,6 @@ function InRoom() {
   useEffect(() => {
     if (!playbar.isActive) {
       handleLeave();
-      navigate("/browse-rooms");
       enqueueSnackbar({ body: "This device is not active", type: "WARNING" });
     }
   }, [playbar.isActive]);
