@@ -23,6 +23,8 @@ import {
 } from "./SelectPlaylistModal.styles";
 // Types
 import { MultiplePlaylists, SinglePlaylistType } from "../../../types/playlist";
+import { useAppSelector } from "../../../store/hooks";
+import { selectCurrentUser } from "../../../slices/auth";
 
 interface SelectPlaylistModal {
   uri: string;
@@ -31,11 +33,12 @@ interface SelectPlaylistModal {
 
 function SelectPlaylistModal({ uri, handleClose }: SelectPlaylistModal) {
   const [input, setInput] = useState("");
-  const { data, isLoading, error } = useSWRInfinite<MultiplePlaylists>(
+  const { data, isLoading } = useSWRInfinite<MultiplePlaylists>(
     getUserPlaylistsKey("50"),
     { initialSize: 10 }
   );
   const { addToPlaylist } = useTrackMutators();
+  const user = useAppSelector(selectCurrentUser);
   const isOnline = useNetwork();
 
   function handleSelect(playlistId: string) {
@@ -52,7 +55,10 @@ function SelectPlaylistModal({ uri, handleClose }: SelectPlaylistModal) {
   if (data) {
     data.forEach((page) => {
       page.items.forEach((item) => {
-        if (item.name.toLowerCase().includes(input.toLowerCase())) {
+        if (
+          item.name.toLowerCase().includes(input.toLowerCase()) &&
+          (item.collaborative || item.owner.id === user.id)
+        ) {
           outPutData.push(item);
         }
       });
