@@ -56,8 +56,6 @@ function PlayerProvider({ children }: PropsWithChildren) {
     };
   }, [isActive]);
 
-  console.log("re-render");
-
   const value = useMemo(() => {
     return {
       isInitLoading,

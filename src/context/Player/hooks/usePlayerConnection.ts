@@ -21,6 +21,7 @@ import Timer from "../../../utils/timer";
 // Types
 import { AccesTokenStorage } from "../../../types/auth";
 import { useSWRConfig } from "swr";
+import { enqueueMessage } from "../../Snackbar/SnackbarProvider";
 
 function usePlayerConnection(
   playerRef: MutableRefObject<Spotify.Player | null>
@@ -100,6 +101,14 @@ function usePlayerConnection(
 
         player.addListener("not_ready", ({ device_id }) => {
           console.log("not ready" + device_id);
+        });
+
+        player.addListener("autoplay_failed", () => {
+          console.log("Autoplay failed");
+          enqueueMessage({
+            body: "Could not Autoplay, please pause and play track",
+            type: "ALERT",
+          });
         });
 
         // Runs when this app is the active device
