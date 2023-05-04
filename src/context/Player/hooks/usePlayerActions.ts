@@ -19,6 +19,7 @@ function usePlayerActions(playerRef: MutableRefObject<Spotify.Player | null>) {
   };
 
   const playTrack = (contextURI?: string, uri?: string, index?: number) => {
+    playerRef.current?.activateElement();
     dispatch(playTrackThunk(contextURI, uri, index));
   };
 
@@ -28,10 +29,12 @@ function usePlayerActions(playerRef: MutableRefObject<Spotify.Player | null>) {
     contextURI?: string,
     index?: number
   ) => {
+    playerRef.current?.activateElement();
     return dispatch(playSeekTrackThunk(position, uri, contextURI, index));
   };
 
   const playShuffle = (contextURI: string, numberOfTracks: number) => {
+    playerRef.current?.activateElement();
     dispatch(playShuffleThunk(contextURI, numberOfTracks));
   };
 
