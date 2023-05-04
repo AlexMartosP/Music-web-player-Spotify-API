@@ -32,10 +32,11 @@ function PlaybackTracker({
     return () => {
       unsub();
     };
-  }, []);
+  }, [duration]);
 
   function handleTrackChange(newPart: number, clicked?: boolean) {
     setInternPosition(Math.round(duration * newPart));
+
     Timer.stop();
 
     if (clicked) {
