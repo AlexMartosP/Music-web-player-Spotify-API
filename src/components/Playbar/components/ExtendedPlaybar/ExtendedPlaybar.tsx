@@ -80,7 +80,7 @@ function ExtendedPlaybar({
   }
 
   useEffect(() => {
-    if (coverRef.current && previousTrack[0]) {
+    if (coverRef.current && previousTrack.length > 0) {
       coverRef.current?.scrollTo({
         left: coverRef.current.scrollWidth / 3,
       });
@@ -117,10 +117,16 @@ function ExtendedPlaybar({
     }
 
     return () => {
+      if (coverRef.current) {
+        coverRef.current?.scrollTo({
+          left: 0,
+        });
+      }
+
       previousObserver.disconnect();
       nextObserver.disconnect();
     };
-  }, [currentTrack.id]);
+  }, [currentTrack.id, previousTrack]);
 
   return createPortal(
     <>
