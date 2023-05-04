@@ -76,7 +76,15 @@ function Login() {
           </button>
           {error && (
             <span className="text-red">
-              {typeof error === "object" ? error.error_description : error}
+              {typeof error === "object" ? (
+                <>
+                  {error?.status === 96
+                    ? "This user not registered in the Developer Dashboard, please contact me at: alex.martos@hotmail.se"
+                    : error.error_description}
+                </>
+              ) : (
+                error
+              )}
             </span>
           )}
         </ButtonWrapper>

@@ -1,4 +1,4 @@
-import { MutableRefObject, useCallback } from "react";
+import { MutableRefObject } from "react";
 import {
   addToQueue as addToQueueThunk,
   changeRepeatMode as changeRepeatModeThunk,
@@ -6,6 +6,7 @@ import {
   playShuffle as playShuffleThunk,
   playTrack as playTrackThunk,
   toggleShuffle as toggleShuffleThunk,
+  update_volume,
 } from "../../../slices/playbar";
 import { seekRemote, toggleRemotePlay } from "../../../slices/remote";
 import { useAppDispatch } from "../../../store/hooks";
@@ -75,6 +76,11 @@ function usePlayerActions(playerRef: MutableRefObject<Spotify.Player | null>) {
     dispatch(addToQueueThunk(uri));
   };
 
+  const setVolume = (newVolume: number) => {
+    dispatch(update_volume(newVolume));
+    playerRef.current?.setVolume(newVolume);
+  };
+
   return {
     activateElement,
     resume,
@@ -88,6 +94,7 @@ function usePlayerActions(playerRef: MutableRefObject<Spotify.Player | null>) {
     changeRepeatMode,
     toggleShuffle,
     togglePlay,
+    setVolume,
   };
 }
 

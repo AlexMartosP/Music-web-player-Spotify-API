@@ -61,8 +61,9 @@ function InRoom() {
     }
 
     if (
-      (!remote.isListener && !remote.isModerator) ||
-      (id && id !== remote.roomInfo.id)
+      ((!remote.isListener && !remote.isModerator) ||
+        (id && id !== remote.roomInfo.id)) &&
+      playbar.isActive
     ) {
       // Leave if change room
       joinRoon();
@@ -77,11 +78,13 @@ function InRoom() {
     }
   }
 
-  if (!playbar.isActive) {
-    navigate("/browse-rooms");
-    enqueueSnackbar({ body: "This device is not active", type: "WARNING" });
-    return null;
-  }
+  useEffect(() => {
+    if (!playbar.isActive) {
+      handleLeave();
+      navigate("/browse-rooms");
+      enqueueSnackbar({ body: "This device is not active", type: "WARNING" });
+    }
+  }, [playbar.isActive]);
 
   return (
     <>

@@ -23,7 +23,7 @@ import trackIsAvailable from "../../helpers/trackIsAvailable";
 // Helpers
 import formatTime from "../../helpers/formatTime";
 // Icons
-import { Heart, MoreHorizontal, Play } from "react-feather";
+import { Heart, MoreHorizontal, Pause, Play } from "react-feather";
 // Styles
 import { ButtonWrapper, MetaWrapper, Wrapper } from "./SingleTrack.styles";
 // Types
@@ -136,8 +136,15 @@ function SingleTrack({
             disabled={!isPlayable || !isOnline}
           >
             <MetaWrapper>
-              {isPlayable && <Play />}
-              <span className="number text-gray-small">{index + 1}</span>
+              {currentTrack.id === trackData.id ? (
+                <Pause className="playing" />
+              ) : (
+                <>
+                  {isPlayable && <Play />}
+                  <span className="number text-gray-small">{index + 1}</span>
+                </>
+              )}
+
               <img src={image} alt="" />
               <div>
                 <h4

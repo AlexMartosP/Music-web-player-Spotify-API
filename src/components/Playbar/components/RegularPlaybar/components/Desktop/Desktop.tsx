@@ -9,12 +9,12 @@ import { usePlayer } from "../../../../../../context/Player/PlayerProvider";
 // Hooks
 import useSave from "../../../../hooks/useSave";
 // Component
-import DevicesModule from "../../../DevicesModal";
-import TrackActions from "../../../TrackActions";
-import TrackInfo from "../../../TrackInfo";
 import PlaybackTracker from "../../../../../PlaybackTracker";
 import VolumeTracker from "../../../../../VolumeTracker";
 import ClickAwayListener from "../../../../../ui/ClickAwayListener";
+import DevicesModule from "../../../DevicesModal";
+import TrackActions from "../../../TrackActions";
+import TrackInfo from "../../../TrackInfo";
 // Icons
 import {
   Disc,
@@ -44,8 +44,7 @@ function Desktop({ openPlaylistModal }: DesktopProps) {
   );
   const volumeRef = useRef<HTMLButtonElement>(null);
   const deviceRef = useRef<HTMLButtonElement>(null);
-  const { localVolume, handleVolumeChange, isInitLoading, playerActions } =
-    usePlayer();
+  const { isInitLoading, playerActions } = usePlayer();
 
   return (
     <>
@@ -113,11 +112,7 @@ function Desktop({ openPlaylistModal }: DesktopProps) {
                 preventCloseInside
                 preventScroll={false}
               >
-                <VolumeTracker
-                  currentVolume={localVolume}
-                  handleVolumeChange={handleVolumeChange}
-                  isDisabled={!playbar.isActive}
-                />
+                <VolumeTracker isDisabled={!playbar.isActive} />
               </ClickAwayListener>
             )}
           </div>

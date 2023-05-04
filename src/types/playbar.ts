@@ -15,11 +15,13 @@ export interface PlayStateType {
 }
 
 export interface InitialStateType {
-  isActive: boolean;
-  deviceId: "";
-  currentTrack: Spotify.Track;
-  nextTrack: Spotify.Track[];
-  previousTrack: Spotify.Track[];
-  playState: PlayStateType;
-  player: any;
+  player: {
+    isActive: boolean;
+    deviceId: "";
+    currentTrack: Spotify.Track;
+    nextTrack: Spotify.Track[];
+    previousTrack: Spotify.Track[];
+    playState: PlayStateType;
+  };
+  volume: number;
 }

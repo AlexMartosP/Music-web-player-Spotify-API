@@ -11,7 +11,7 @@ import {
   CurrentWrapper,
   Item,
 } from "../../../DevicesModal/DevicesModal.styles";
-import { selectPlaybar } from "../../../../../../slices/playbar";
+import { selectPlaybar, selectVolume } from "../../../../../../slices/playbar";
 import { useAppSelector } from "../../../../../../store/hooks";
 import { LoadingAnimation } from "../../../../../ui/LoadingAnimation";
 import { usePlayer } from "../../../../../../context/Player/PlayerProvider";
@@ -25,7 +25,8 @@ function Devices({ closeDevices }: DevicesProps) {
   const { activeDevice, inActiveDevices, isLoading, transferDevice } =
     useDevices();
   const playbar = useAppSelector(selectPlaybar);
-  const { localVolume, handleVolumeChange } = usePlayer();
+  const volume = useAppSelector(selectVolume);
+  const { playerActions } = usePlayer();
 
   function handleClick(id: string) {
     transferDevice(id);
@@ -81,14 +82,14 @@ function Devices({ closeDevices }: DevicesProps) {
           </Content>
           <VolumeWrapper>
             <Track
-              currentPosition={localVolume * 100}
-              handleChange={handleVolumeChange}
-              handleEnd={handleVolumeChange}
+              currentPosition={volume * 100}
+              handleChange={playerActions.setVolume}
+              handleEnd={playerActions.setVolume}
               isDisabled={!playbar.isActive}
             />
-            {localVolume < 0.1 && <VolumeX />}
-            {localVolume <= 0.5 && localVolume > 0.1 && <Volume1 />}
-            {localVolume > 0.5 && <Volume2 />}
+            {volume < 0.1 && <VolumeX />}
+            {volume <= 0.5 && volume > 0.1 && <Volume1 />}
+            {volume > 0.5 && <Volume2 />}
           </VolumeWrapper>
         </>
       ) : (

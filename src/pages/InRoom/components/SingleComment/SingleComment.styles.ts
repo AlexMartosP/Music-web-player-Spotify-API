@@ -43,7 +43,7 @@ export const Wrapper = styled.div<{ pos: number }>`
 
   img {
     flex-shrink: 0;
-    min-width: 40px;
+    width: 3rem;
   }
 `;
 

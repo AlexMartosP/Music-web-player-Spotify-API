@@ -56,6 +56,16 @@ export const MetaWrapper = styled.div`
     display: none;
     width: 1rem;
     height: 1rem;
+    stroke-width: 2.5px;
+  }
+
+  svg.playing {
+    display: block;
+    color: var(--clr-blue);
+  }
+
+  svg.playing ~ .number {
+    display: none;
   }
 
   img {

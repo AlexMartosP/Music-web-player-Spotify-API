@@ -70,8 +70,9 @@ export const EmojiesWrapper = styled.div`
   }
 
   img {
-    @media (max-width: ${BREAKPOINTS.md_laptop}px) {
-      max-width: 1.5rem;
+    max-width: 1.5rem;
+    @media (min-width: ${BREAKPOINTS.md_laptop}px) {
+      max-width: 2.5rem;
     }
   }
 `;

@@ -8,7 +8,9 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   deactivate,
   load,
+  selectCurrentTrack,
   selectPlaybar,
+  selectVolume,
   update_current_track,
   update_next_tracks,
   update_playstate,
@@ -26,18 +28,17 @@ import Timer from "../../../utils/timer";
 import { AccesTokenStorage } from "../../../types/auth";
 
 function usePlayerConnection(
-  localVolume: number,
   playerRef: MutableRefObject<Spotify.Player | null>
 ) {
   const [isInitLoading, setIsInitLoading] = useState(true);
-  const playbar = useAppSelector(selectPlaybar);
+  const currentTrack = useAppSelector(selectCurrentTrack);
   const dispatch = useAppDispatch();
   const { logout } = useAuth();
   const { mutate: savedMutate } = useSWRImmutable(
-    playbar.currentTrack?.id && {
+    currentTrack?.id && {
       type: "savings",
-      key: playbar.currentTrack.id,
-      urls: checkSavedTracks([playbar.currentTrack.id]),
+      key: currentTrack.id,
+      urls: checkSavedTracks([currentTrack.id]),
     },
     flatFetcher,
     { revalidateIfStale: false, revalidateOnMount: false }
@@ -91,7 +92,7 @@ function usePlayerConnection(
               }
             }
           },
-          volume: localVolume,
+          volume: 0.5,
         });
 
         player.addListener("ready", async ({ device_id }) => {

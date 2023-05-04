@@ -4,11 +4,12 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 // Redux
-import { selectPlaybar } from "../../slices/playbar";
+import { selectIsActive, selectPlaybar } from "../../slices/playbar";
 import { useAppSelector } from "../../store/hooks";
 // Hooks
 import usePlayerActions from "./hooks/usePlayerActions";
@@ -17,8 +18,6 @@ import usePlayerConnection from "./hooks/usePlayerConnection";
 import isInputField from "../../helpers/isInputField";
 
 export interface PlayerContextType {
-  handleVolumeChange: (newVolume: number) => void;
-  localVolume: number;
   isInitLoading: boolean;
   playerActions: ReturnType<typeof usePlayerActions>;
 }
@@ -27,16 +26,9 @@ const PlayerContext = createContext<PlayerContextType | null>(null);
 
 function PlayerProvider({ children }: PropsWithChildren) {
   const playerRef = useRef<Spotify.Player | null>(null);
-
-  const [localVolume, setLocalVolume] = useState(0.5);
-  const playbar = useAppSelector(selectPlaybar);
+  const isActive = useAppSelector(selectIsActive);
   const playerActions = usePlayerActions(playerRef);
-  const isInitLoading = usePlayerConnection(localVolume, playerRef);
-
-  const handleVolumeChange = useCallback((newVolume: number) => {
-    setLocalVolume(newVolume);
-    playerRef.current?.setVolume(newVolume);
-  }, []);
+  const isInitLoading = usePlayerConnection(playerRef);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -48,26 +40,24 @@ function PlayerProvider({ children }: PropsWithChildren) {
       }
     }
 
-    if (playbar.isActive) {
+    if (isActive) {
       window.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [playbar.isActive]);
+  }, [isActive]);
+
+  const value = useMemo(() => {
+    return {
+      isInitLoading,
+      playerActions,
+    };
+  }, [isInitLoading]);
 
   return (
-    <PlayerContext.Provider
-      value={{
-        handleVolumeChange,
-        localVolume,
-        isInitLoading,
-        playerActions,
-      }}
-    >
-      {children}
-    </PlayerContext.Provider>
+    <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>
   );
 }
 

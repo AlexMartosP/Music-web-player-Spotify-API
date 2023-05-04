@@ -85,13 +85,15 @@ function InRoomPlaybar({ openPlaylistModal }: InRoomPlaybarProps) {
         ) : (
           <>
             {width < BREAKPOINTS.md_laptop ? (
-              <button
-                className="reset-button"
-                onClick={() => setmenuOpen(true)}
-                ref={menuBtnRef}
-              >
-                <MoreHorizontal />
-              </button>
+              <ButtonsFlex>
+                <button
+                  className="reset-button"
+                  onClick={() => setmenuOpen(true)}
+                  ref={menuBtnRef}
+                >
+                  <MoreHorizontal />
+                </button>
+              </ButtonsFlex>
             ) : (
               <ButtonsFlex>
                 <button className="reset-button" onClick={handleSave}>
@@ -122,8 +124,12 @@ function InRoomPlaybar({ openPlaylistModal }: InRoomPlaybarProps) {
           ref={menuBtnRef}
           mobileOnly
         >
-          <PopperMenu.Item>Save track</PopperMenu.Item>
-          <PopperMenu.Item>Add track to playlist</PopperMenu.Item>
+          <PopperMenu.Item onClick={handleSave}>
+            {isSaved ? "Unsave track" : "Save track"}
+          </PopperMenu.Item>
+          <PopperMenu.Item onClick={openPlaylistModal}>
+            Add track to playlist
+          </PopperMenu.Item>
         </PopperMenu>
       )}
     </>

@@ -45,6 +45,15 @@ function useAuth() {
       sessionStorage.removeItem("state");
       sessionStorage.removeItem("code_verifier");
     } catch (error) {
+      if ((error as Error)?.message) {
+        dispatch(
+          auth_error({
+            error_description: (error as Error).message,
+            status: 96,
+          })
+        );
+        return;
+      }
       dispatch(auth_error((error as RegularErrorType).error_description));
     }
   }

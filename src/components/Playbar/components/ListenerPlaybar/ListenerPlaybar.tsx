@@ -13,7 +13,7 @@ import { usePlayer } from "../../../../context/Player/PlayerProvider";
 import { useRemoteHandlers } from "../../../../context/RemoteHandlers";
 import useWindowSize from "../../../../hooks/useWindowSize";
 import { selectPlaybar } from "../../../../slices/playbar";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { useAppSelector } from "../../../../store/hooks";
 import VolumeTracker from "../../../VolumeTracker";
 import ClickAwayListener from "../../../ui/ClickAwayListener";
 import { ActionButton, ButtonsFlex, RemoteWrapper } from "../../Playbar.styles";
@@ -29,7 +29,7 @@ function ListenerPlaybar({ openPlaylistModal }: ListenerPlaybarProps) {
   const [isVolumeOpen, setIsVolumeOpen] = useState(false);
   const [isMenuOpen, setmenuOpen] = useState(false);
   const playbar = useAppSelector(selectPlaybar);
-  const { localVolume, handleVolumeChange, isInitLoading } = usePlayer();
+  const { isInitLoading } = usePlayer();
   const { isSaved, handleSave } = useSave(
     playbar.currentTrack.id,
     playbar.currentTrack.uri
@@ -63,11 +63,7 @@ function ListenerPlaybar({ openPlaylistModal }: ListenerPlaybarProps) {
                 preventCloseInside
                 preventScroll={false}
               >
-                <VolumeTracker
-                  currentVolume={localVolume}
-                  handleVolumeChange={handleVolumeChange}
-                  isDisabled={!playbar.isActive}
-                />
+                <VolumeTracker isDisabled={!playbar.isActive} />
               </ClickAwayListener>
             )}
           </div>
@@ -113,9 +109,14 @@ function ListenerPlaybar({ openPlaylistModal }: ListenerPlaybarProps) {
           isOpen={isMenuOpen}
           handleClose={() => setmenuOpen(false)}
           ref={menuBtnRef}
+          mobileOnly
         >
-          <PopperMenu.Item>Save track</PopperMenu.Item>
-          <PopperMenu.Item>Add track to playlist</PopperMenu.Item>
+          <PopperMenu.Item onClick={handleSave}>
+            {isSaved ? "Unsave track" : "Save track"}
+          </PopperMenu.Item>
+          <PopperMenu.Item onClick={openPlaylistModal}>
+            Add track to playlist
+          </PopperMenu.Item>
         </PopperMenu>
       )}
     </>

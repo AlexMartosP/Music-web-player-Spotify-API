@@ -13,71 +13,79 @@ import mutateFetcher from "../services/mutateFetcher";
 import { InitialStateType, PlayStateType, RepeatType } from "../types/playbar";
 
 const initialState: InitialStateType = {
-  isActive: false,
-  deviceId: "",
-  currentTrack: {
-    uri: "",
-    uid: "",
-    id: "",
-    type: "track",
-    media_type: "audio",
-    name: "",
-    is_playable: false,
-    album: {
+  player: {
+    isActive: false,
+    deviceId: "",
+    currentTrack: {
       uri: "",
+      uid: "",
+      id: "",
+      type: "track",
+      media_type: "audio",
       name: "",
-      images: [{ url: "" }],
+      is_playable: false,
+      album: {
+        uri: "",
+        name: "",
+        images: [{ url: "" }],
+      },
+      artists: [],
+      duration_ms: 0,
+      track_type: "audio",
+      linked_from: {
+        uri: null,
+        id: null,
+      },
     },
-    artists: [],
-    duration_ms: 0,
-    track_type: "audio",
-    linked_from: {
-      uri: null,
-      id: null,
+    nextTrack: [],
+    previousTrack: [],
+    playState: {
+      isPaused: false,
+      isShuffle: false,
+      repeatMode: 0,
+      position: 0,
+      duration: 0,
     },
   },
-  nextTrack: [],
-  previousTrack: [],
-  playState: {
-    isPaused: false,
-    isShuffle: false,
-    repeatMode: 0,
-    position: 0,
-    duration: 0,
-  },
-  player: {},
+  volume: 0.5,
 };
 
 // Selectors
-export const selectPlaybar = (state: RootState) => state.playbar;
-export const selectIsActive = (state: RootState) => state.playbar.isActive;
+export const selectPlaybar = (state: RootState) => state.playbar.player;
+export const selectIsActive = (state: RootState) =>
+  state.playbar.player.isActive;
 export const selectCurrentTrack = (state: RootState) =>
-  state.playbar.currentTrack;
+  state.playbar.player.currentTrack;
+export const selectVolume = (state: RootState) => state.playbar.volume;
 
 const playbarSlice = createSlice({
   name: "playbar",
   initialState,
   reducers: {
     update_current_track: (state, action: { payload: Spotify.Track }) => {
-      state.currentTrack = action.payload;
+      state.player.currentTrack = action.payload;
     },
     update_next_tracks: (state, action: { payload: Spotify.Track[] }) => {
-      state.nextTrack = action.payload;
+      state.player.nextTrack = action.payload;
     },
     update_previous_tracks: (state, action: { payload: Spotify.Track[] }) => {
-      state.previousTrack = action.payload;
+      state.player.previousTrack = action.payload;
     },
     update_playstate: (state, action: { payload: PlayStateType }) => {
-      state.playState = action.payload;
+      state.player.playState = action.payload;
     },
     update_device: (state, action) => {
-      state.deviceId = action.payload;
+      state.player.deviceId = action.payload;
     },
     update_status: (state, action: { payload: boolean }) => {
-      state.isActive = action.payload;
+      state.player.isActive = action.payload;
+    },
+    update_volume: (state, action) => {
+      state.volume = action.payload;
     },
     deactivate: (state) => {
-      state.isActive = false;
+      state.player.isActive = false;
+      state.player.currentTrack = initialState.player.currentTrack;
     },
   },
 });
@@ -108,7 +116,7 @@ export const transfer =
     return mutateFetcher(base_api_url + `/me/player`, "PUT", {
       device_ids: [deviceId],
     }).then(() => {
-      if (deviceId === playbar.deviceId) {
+      if (deviceId === playbar.player.deviceId) {
         dispatch(update_status(true));
       }
     });
@@ -165,7 +173,7 @@ export const playShuffle =
       },
     });
 
-    if (!playbar.playState.isShuffle) {
+    if (!playbar.player.playState.isShuffle) {
       dispatch(toggleShuffle());
     }
   };
@@ -178,7 +186,7 @@ export const togglePlay =
     // Only if moderator
     dispatch(toggleRemotePlay());
 
-    if (playbar.playState.isPaused && !forcePause) {
+    if (playbar.player.playState.isPaused && !forcePause) {
       mutateFetcher(base_api_url + `/me/player/play`, "PUT");
     } else {
       mutateFetcher(base_api_url + `/me/player/pause`, "PUT");
@@ -208,18 +216,19 @@ export const toggleShuffle = (): AppThunk => async (dispatch, getState) => {
   const { playbar } = getState();
 
   mutateFetcher(
-    base_api_url + `/me/player/shuffle?state=${!playbar.playState.isShuffle}`,
+    base_api_url +
+      `/me/player/shuffle?state=${!playbar.player.playState.isShuffle}`,
     "PUT"
   );
 };
 
 export const changeRepeatMode = (): AppThunk => async (dispatch, getState) => {
   const {
-    playbar: { playState },
+    playbar: { player },
   } = getState();
 
   let mode = 0;
-  switch (playState.repeatMode + 1) {
+  switch (player.playState.repeatMode + 1) {
     case 1:
       mode = 1;
       break;
@@ -252,6 +261,7 @@ export const {
   update_device,
   update_playstate,
   update_status,
+  update_volume,
   deactivate,
 } = playbarSlice.actions;
 export default playbarSlice.reducer;
