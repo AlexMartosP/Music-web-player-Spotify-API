@@ -27,6 +27,7 @@ import { SingleAlbum } from "../../../../types/album";
 import { SingleArtistType } from "../../../../types/artist";
 import { SinglePlaylistType } from "../../../../types/playlist";
 import { SingleTrackType } from "../../../../types/track";
+import { Suspense } from "react";
 
 interface SearchResultProps {
   query: string;
@@ -66,7 +67,9 @@ const SearchResult = ({ query }: SearchResultProps) => {
         <>
           {(hasData || outlet) && <Filter data={data} query={query} />}
           {outlet ? (
-            <Outlet context={query} />
+            <Suspense fallback="">
+              <Outlet context={query} />
+            </Suspense>
           ) : (
             <>
               {hasData ? (

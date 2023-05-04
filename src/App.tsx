@@ -17,7 +17,6 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Protected from "./pages/Protected";
 import { HelmetProvider } from "react-helmet-async";
-import Search from "./pages/Search";
 // Lazy pages
 const Album = lazy(() => import("./pages/Album"));
 const Artist = lazy(() => import("./pages/Artist"));
@@ -33,6 +32,7 @@ const Library = lazy(() => import("./pages/Library"));
 const Playlist = lazy(() => import("./pages/Playlist"));
 const Queue = lazy(() => import("./pages/Queue"));
 const SavedTracks = lazy(() => import("./pages/SavedTracks"));
+const Search = lazy(() => import("./pages/Search"));
 const SearchAlbums = lazy(() => import("./pages/Search/subpages/Albums"));
 const Artists = lazy(() => import("./pages/Search/subpages/Artists"));
 const Playlists = lazy(() => import("./pages/Search/subpages/Playlists"));
